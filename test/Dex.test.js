@@ -20,8 +20,9 @@ contract("Dex", ([deployer, investor]) => {
     before(async () => {
         dho = await Dho.new()
         dex = await Dex.new(dho.address)
-
+        
         dho.transfer(dex.address, tokens("1000000"))
+        console.log("BEFORE EXECUTED...")
     })
 
     describe("Dex deployment", async () => {
@@ -47,15 +48,29 @@ contract("Dex", ([deployer, investor]) => {
     })
 
     describe("buyTokens()", async = () => {
-        it("Sould transfer tokens to investor based on a token fixed price of 1ETH:100DHO", async () => {
-            const result = await dex.buyTokens({from: investor, value: tokens("1")}) // 1 ETH
+        it("Should transfer tokens to investor based on a token fixed price of 1ETH:100DHO", async () => {
+            await dex.buyTokens({from: investor, value: tokens("1")}) // 1 ETH
             const investorTokenBalance = await dho.balanceOf(investor)
             assert.equal(investorTokenBalance, tokens("100")) // 100 DHO
-            console.log(result)
         })
     })
 
+    describe("sellTokens()", async = () => {
 
+        before(async () => {
+            await dho.approve(dex.address, tokens("101"), { from: investor })
+            const balance = await dho.balanceOf(investor)
+        })
 
+        it("Sould transfer tokens from investor based on a token fixed price of 1ETH:100DHO", async () => {
+            await dex.sellTokens(tokens("100"), {from: investor}) // 100 DHO
+            const investorTokenBalance = await dho.balanceOf(investor)
+            assert.equal(investorTokenBalance, "0")
+        })
 
+        it("Should not allow user to sell more tokens than it has", async () => {
+            await dex.sellTokens(tokens("1"), {from: investor}).should.be.rejected
+        })
+
+    })
 })
