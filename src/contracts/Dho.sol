@@ -7,6 +7,6 @@ import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 contract Dho is ERC20 {
     
     constructor() ERC20("Dho Token", "DHO") {
-        _mint(msg.sender, 1000000000000000000000000);
+        _mint(msg.sender, 1000000000000000000000000); // The deployer gets 1Mi tokens
     }
 }
