@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 
 export const ConnectionContext = React.createContext();
@@ -9,35 +8,28 @@ export const ConnectionProvider = ({ children }) => {
     const [connectedAccount, setConnectedAccount] = useState("");
 
     const connectWallet = async () => {
-        try {
-            if(!ethereum) return alert("Please install metamask");
+        if(!ethereum) return alert("Please install metamask");
 
-            ethereum.request({ method: "eth_requestAccounts"})
-                .then(accounts => {
-                    setConnectedAccount(accounts[0]);
-                })
-        } catch (error) {
-            console.log(error);
-            throw new Error("No ethereum object");
-        }
+        ethereum.request({ method: "eth_requestAccounts"})
+            .then(accounts => {
+                setConnectedAccount(accounts[0]);
+            }).catch(error => {
+                console.log(error);
+            });
     }
 
     const checkIfWalletIsConnected = async () => {
-        try {
-            if(!ethereum) return alert("Please install metamask");
-
-            ethereum.request({ method: "eth_accounts"})
-                .then(accounts => {
-                    if (accounts.length) {
-                        setConnectedAccount(accounts[0]);
-                    } else {
-                        console.log("No accounts found")
-                    }   
-                });            
-        } catch (error) {
-            console.log(error);
-            throw new Error("No ethereum object");
-        }
+        if(!ethereum) return alert("Please install metamask");
+        ethereum.request({ method: "eth_accounts"})
+            .then(accounts => {
+                if (accounts.length) {
+                    setConnectedAccount(accounts[0]);
+                } else {
+                    console.log("No accounts found")
+                }
+            }).catch(error => {
+                console.log(error);
+            });
     }
 
     useEffect(() => {
