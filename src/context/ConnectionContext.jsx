@@ -10,14 +10,14 @@ const web3 = new Web3(ethereum);
 
 const getTokenContract = async () => {
     const networkId = await web3.eth.net.getId();
-    const contract = new web3.eth.Contract(Dho.abi, Dho.networks[networkId].address);
-    console.log(contract);
-    return contract;
+    const tokenAddress = Dho.networks[networkId].address;
+    return new web3.eth.Contract(Dho.abi, tokenAddress);
 } 
 
 export const ConnectionProvider = ({ children }) => {
     const [connectedAccount, setConnectedAccount] = useState("");
-    const [accountBalance, setAccountBalance] = useState(0); 
+    const [accountEthBalance, setAccountEthBalance] = useState(0);
+    const [accountDhoBalance, setAccountDhoBalance] = useState(0);
 
     const connectWallet = async () => {
         if(!ethereum) return alert("Please install metamask");
@@ -52,7 +52,13 @@ export const ConnectionProvider = ({ children }) => {
     const checkAccountBalance = async (account) => {
         if (account) {
             const balance = await web3.eth.getBalance(account);
-            setAccountBalance(web3.utils.fromWei(balance.toString()));
+            setAccountEthBalance(web3.utils.fromWei(balance.toString()));
+
+            getTokenContract()
+                .then(contract => {
+                    contract.methods.balanceOf(account).call()
+                        .then(dhoBalance => setAccountDhoBalance(web3.utils.fromWei(dhoBalance)));
+                })
         }
     }
 
@@ -65,7 +71,7 @@ export const ConnectionProvider = ({ children }) => {
     }, []);
 
     return (
-        <ConnectionContext.Provider value={{ connectWallet, connectedAccount, accountBalance }}>
+        <ConnectionContext.Provider value={{ connectWallet, connectedAccount, accountEthBalance, accountDhoBalance }}>
             {children}
         </ConnectionContext.Provider>
     )
