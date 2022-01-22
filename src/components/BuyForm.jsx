@@ -2,13 +2,13 @@ import { useContext, useState } from "react";
 import { ConnectionContext } from "../context/ConnectionContext";
 
 const BuyForm = () => {
-    const { accountEthBalance, accountDhoBalance } = useContext(ConnectionContext);
+    const { connectedAccount, accountEthBalance, accountDhoBalance } = useContext(ConnectionContext);
     const [ output, setOutput ] = useState(0);
     const tokenRate = 100; 
 
     return (
         <div className="flex flex-col w-full md:w-80 lg:w-80 py-5 px-3 white-glassmorphism space-y-5 text-white">
-            <div className="font-bold">
+            <div className="flex justify-end">
                 ETH balance: {accountEthBalance}
             </div>
             <div className="flex rounded w-full items-center py-5 white-glassmorphism justify justify-evenly relative">
@@ -23,11 +23,11 @@ const BuyForm = () => {
                         required
                     />
                 </div>
-                <div className="rounded text-center font-bold absolute right-1 h-7 w-14 white-glassmorphism hover:bg-slate-600">
+                <div className="rounded text-center font-bold absolute right-1 h-7 w-14">
                     ETH
                 </div>
             </div>
-            <div className="font-bold">
+            <div className="flex justify-end">
                 DHO balance: {accountDhoBalance}
             </div>
             <div className="flex rounded w-full items-center py-5 white-glassmorphism justify justify-evenly relative">
@@ -40,13 +40,20 @@ const BuyForm = () => {
                         disabled
                     />
                 </div>
-                <div className="rounded text-center font-bold absolute right-1 h-7 w-14 white-glassmorphism hover:bg-slate-600">
+                <div className="rounded text-center font-bold absolute right-1 h-7 w-14">
                     DHO
                 </div>
             </div>
-            <button type="button" onClick={() => {console.log("Buy buy!")}} className="flex rounded justify-center bg-[#2952e3] px-6 py-1 cursor-pointer hover:bg-[#2546bd] shadow-lg">
-                <p className="text-white text-base font-semibold">Swap</p>
-            </button>
+            {connectedAccount ? (
+                <button type="button" onClick={() => {console.log("Buy buy!")}} className="flex rounded justify-center bg-[#2952e3] px-6 py-1 cursor-pointer hover:bg-[#2546bd] shadow-lg">
+                    <p className="text-white text-base font-semibold">Swap</p>
+                </button>
+            ) : (
+                <button type="button" onClick={() => {console.log("Buy buy!")}} className="flex rounded justify-center bg-[#2952e3] px-6 py-1 cursor-pointer hover:bg-[#2546bd] shadow-lg">
+                    <p className="text-white text-base font-semibold">Connect walle first</p>
+                </button>
+            )}
+            
         </div>
     );
 }

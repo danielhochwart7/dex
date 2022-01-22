@@ -8,7 +8,7 @@ const SellForm = () => {
 
     return (
         <div className="flex flex-col w-full md:w-80 lg:w-80 py-5 px-3 white-glassmorphism space-y-5 text-white">
-            <div className="font-bold">
+            <div className="flex justify-end">
                 DHO balance: {accountDhoBalance}
             </div>
             <div className="flex rounded w-full items-center py-5 white-glassmorphism justify justify-evenly relative">
@@ -24,11 +24,11 @@ const SellForm = () => {
                     />
 
                 </div>
-                <div className="rounded text-center font-bold absolute right-1 h-7 w-14 white-glassmorphism hover:bg-slate-600">
+                <div className="rounded text-center font-bold absolute right-1 h-7 w-14">
                     DHO
                 </div>
             </div>
-            <div className="font-bold">
+            <div className="flex justify-end">
                 ETH balance: {accountEthBalance}
             </div>
             <div className="flex rounded w-full items-center py-5 white-glassmorphism justify justify-evenly relative">
@@ -41,7 +41,7 @@ const SellForm = () => {
                         disabled
                     />
                 </div>
-                <div className="rounded text-center font-bold absolute right-1 h-7 w-14 white-glassmorphism hover:bg-slate-600">
+                <div className="rounded text-center font-bold absolute right-1 h-7 w-14">
                     ETH
                 </div>
             </div>
