@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Web3 from "web3/dist/web3.min.js";
 import Dho from "../abis/Dho.json";
+import Dex from "../abis/Dex.json";
 
 export const ConnectionContext = React.createContext();
 
@@ -12,6 +13,17 @@ const getTokenContract = async () => {
     const networkId = await web3.eth.net.getId();
     const tokenAddress = Dho.networks[networkId].address;
     return new web3.eth.Contract(Dho.abi, tokenAddress);
+}
+
+const getDexAddress = async () => {
+    const networkId = await web3.eth.net.getId();
+    return Dex.networks[networkId].address;
+}
+
+const getDexContract = async () => {
+    const networkId = await web3.eth.net.getId();
+    const dexAddress = await getDexAddress();
+    return new web3.eth.Contract(Dex.abi, dexAddress);
 } 
 
 export const ConnectionProvider = ({ children }) => {
@@ -62,6 +74,50 @@ export const ConnectionProvider = ({ children }) => {
         }
     }
 
+    const buyTokens = async (amount) => {
+        if (amount > 0) {
+            const tokenAmount = web3.utils.toWei(amount.toString(), "Ether");
+            getDexContract()
+                .then(contract => {
+                    contract.methods.buyTokens().send({ from: connectedAccount, value: tokenAmount })
+                        .on("transactionHash", (hash) => {
+                            console.log(`TxHash: ${hash}`)
+                        }).then(res => {
+                            checkAccountBalance(connectedAccount);
+                        });
+                })
+        } else {
+            console.log("Amount must be greater than 0");
+        }
+    }
+
+    const sellTokens = async (tokenAmount) => {
+        if (tokenAmount > 0) {
+            const amount = web3.utils.toWei(tokenAmount.toString(), "Ether");
+            const dexAddress = await getDexAddress();
+            getTokenContract()
+                .then(contract => {
+                    contract.methods.approve(dexAddress, amount)
+                    .send({ from: connectedAccount })
+                    .on("transactionHash", (hash) => {
+                        console.log(`TxHash approved: ${hash}`)
+                        getDexContract()
+                            .then(contract => {
+                                contract.methods.sellTokens(amount)
+                                    .send({ from: connectedAccount })
+                                    .on("transactionHash", (hash) => {
+                                        console.log(`TxHash tokens sold: ${hash}`)
+                                    }).then(res => {
+                                        checkAccountBalance(connectedAccount);
+                                    });
+                                })
+                            })
+                        });
+        } else {
+            console.log("Amount must be greater than 0");
+        }
+    } 
+
     useEffect(() => {
         checkIfWalletIsConnected();
         ethereum.on('accountsChanged', function (accounts) {
@@ -71,7 +127,7 @@ export const ConnectionProvider = ({ children }) => {
     }, []);
 
     return (
-        <ConnectionContext.Provider value={{ connectWallet, connectedAccount, accountEthBalance, accountDhoBalance }}>
+        <ConnectionContext.Provider value={{ connectWallet, connectedAccount, accountEthBalance, accountDhoBalance, buyTokens, sellTokens }}>
             {children}
         </ConnectionContext.Provider>
     )

@@ -9,7 +9,7 @@ const SwapMenu = () =>  {
 
     const handleSwap = () => {
         if (isBuy) {
-            console.log("Buy buy");
+            buyTokens()
         } else {
             console.log("Sell");
         }
@@ -29,15 +29,6 @@ const SwapMenu = () =>  {
                 <BuyForm />
             ) : (
                 <SellForm />
-            )}
-            {connectedAccount ? (
-                <button type="button" onClick={handleSwap} className="flex rounded-full justify-center px-6 py-1 cursor-pointer bg-gradient-to-r from-purple-900 to-blue-500 shadow-sm">
-                    <p className="text-white text-base font-semibold">Swap</p>
-                </button>
-            ) : (
-                <button type="button" onClick={connectWallet} className="flex rounded-full justify-center px-6 py-1 cursor-pointer bg-gradient-to-r from-purple-900 to-blue-500 shadow-sm">
-                    <p className="text-white text-base font-semibold">Connect wallet first</p>
-                </button>
             )}
         </div>
     )

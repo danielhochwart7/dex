@@ -15,7 +15,7 @@ const Header = () =>  {
             
             {!connectedAccount ? (
                 <button type="button" onClick={connectWallet} className="flex absolute right-5 p-2 rounded-full cursor-pointer bg-gradient-to-r from-purple-900 to-blue-500 shadow-sm">
-                    <p className="text-white text-base font-semibold">Connect Wallet</p>
+                    <p className="text-white text-base font-semibold animate-pulse">Connect Wallet</p>
                 </button>
             ) : (
                 <button type="button" className="flex absolute right-5 p-2 rounded-full cursor-pointer bg-gradient-to-r from-purple-900 to-blue-500 shadow-sm">
