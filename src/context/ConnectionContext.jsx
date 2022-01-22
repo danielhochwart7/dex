@@ -64,7 +64,7 @@ export const ConnectionProvider = ({ children }) => {
     const checkAccountBalance = async (account) => {
         if (account) {
             const balance = await web3.eth.getBalance(account);
-            setAccountEthBalance(web3.utils.fromWei(balance.toString()));
+            setAccountEthBalance(web3.utils.fromWei(balance.toString()).slice(0,6));
 
             getTokenContract()
                 .then(contract => {
