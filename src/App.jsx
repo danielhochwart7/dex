@@ -4,11 +4,11 @@ import { SwapMenu, Footer, Header } from "./components";
 const App = () => {
   return (
     <div className="min-h-screen">
-      <div className="gradient-bg-header text-white">
+      <div className="gradient-bg-header">
         <Header />
         <SwapMenu />
       </div>
-      <div className="gradient-bg-footer text-white">
+      <div className="gradient-bg-footer">
         <Footer/>
       </div>
     </div>
