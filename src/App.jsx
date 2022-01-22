@@ -1,4 +1,4 @@
-import { Body, Footer, Header } from "./components";
+import { SwapMenu, Footer, Header } from "./components";
 
 
 const App = () => {
@@ -6,7 +6,7 @@ const App = () => {
     <div className="min-h-screen">
       <div className="gradient-bg-header text-white">
         <Header />
-        <Body />
+        <SwapMenu />
       </div>
       <div className="gradient-bg-footer text-white">
         <Footer/>

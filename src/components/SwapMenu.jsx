@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { ConnectionContext } from "../context/ConnectionContext";
 
-const Body = () =>  {
+const SwapMenu = () =>  {
     const { accountEthBalance, accountDhoBalance } = useContext(ConnectionContext);
     const [ output, setOutput ] = useState(0);
     const tokenRate = 100;
@@ -62,4 +62,4 @@ const Body = () =>  {
     )
 }
 
-export default Body;
+export default SwapMenu;
