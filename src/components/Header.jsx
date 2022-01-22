@@ -14,11 +14,11 @@ const Header = () =>  {
             </div>
             
             {!connectedAccount ? (
-                <button type="button" onClick={connectWallet} className="flex absolute right-5  bg-[#2952e3] p-2 rounded-full cursor-pointer hover:bg-[#2546bd] shadow-lg">
+                <button type="button" onClick={connectWallet} className="flex absolute right-5 p-2 rounded-full cursor-pointer bg-gradient-to-r from-purple-900 to-blue-500 shadow-sm">
                     <p className="text-white text-base font-semibold">Connect Wallet</p>
                 </button>
             ) : (
-                <button type="button" className="flex absolute right-5  bg-[#2952e3] p-2 rounded-full cursor-pointer hover:bg-[#2546bd] shadow-lg">
+                <button type="button" className="flex absolute right-5 p-2 rounded-full cursor-pointer bg-gradient-to-r from-purple-900 to-blue-500 shadow-sm">
                     <p className="text-white text-base font-semibold">{ shortenAddress(connectedAccount) }</p>
                 </button>
             )}

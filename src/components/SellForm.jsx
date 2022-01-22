@@ -15,7 +15,6 @@ const SellForm = () => {
     }
 
     const outputProps = {
-        onChange: () => {},
         disabled: true
     }
 

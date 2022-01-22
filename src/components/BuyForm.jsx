@@ -15,7 +15,6 @@ const BuyForm = () => {
     }
 
     const outputProps = {
-        onChange: () => {},
         disabled: true
     }
 
