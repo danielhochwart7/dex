@@ -1,12 +1,14 @@
+import { SiEthereum } from "react-icons/si";
+import { MdOutlineGeneratingTokens } from "react-icons/md";
 const TokenField = ({tokenName, tokenBalance, value, props}) => {
     return (
         <div>
-            <div className="flex justify-end">
-                {tokenName} balance: {tokenBalance}
+            <div className="flex justify-end text-xs">
+                Balance: {tokenBalance}
             </div>
-            <div className="flex rounded w-full items-center py-5 white-glassmorphism justify justify-evenly relative">
-                <div className="flex absolute left-3">
-                <input
+            <div className="flex flex-row justify-center rounded w-full py-2 blue-glassmorphism space-x-3">
+                <div className="">
+                    <input
                         type="number"
                         className=" text-white font-semibold white-glassmorphism px-1 rounded-lg"
                         placeholder="0"
@@ -14,8 +16,17 @@ const TokenField = ({tokenName, tokenBalance, value, props}) => {
                         {...props}
                     />
                 </div>
-                <div className="rounded text-center font-bold absolute right-1 h-7 w-14">
-                    {tokenName}
+                <div className="flex flex-row rounded font-bold space-x-1">
+                    <div className="flex justify-evenly w-7 h-7 rounded-full border-white">
+                        {tokenName == "ETH" ? (
+                            <SiEthereum fontSize={27} color="#fff"/>
+                        ) : (
+                            <MdOutlineGeneratingTokens fontSize={27} color="#fff"/>
+                        )}
+                    </div>
+                    <div className="flex justify text-sm items-center">
+                        {tokenName}
+                    </div>
                 </div>
             </div>
         </div>

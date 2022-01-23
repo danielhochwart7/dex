@@ -21,7 +21,6 @@ const getDexAddress = async () => {
 }
 
 const getDexContract = async () => {
-    const networkId = await web3.eth.net.getId();
     const dexAddress = await getDexAddress();
     return new web3.eth.Contract(Dex.abi, dexAddress);
 } 

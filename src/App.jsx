@@ -3,7 +3,7 @@ import { SwapMenu, Footer, Header } from "./components";
 
 const App = () => {
   return (
-    <div className="h-screen gradient-bg-header bg-auto">
+    <div className="h-screen gradient-bg ">
       <div>
         <Header />
         <SwapMenu />
