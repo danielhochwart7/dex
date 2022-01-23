@@ -1,19 +1,9 @@
-import { useContext, useState } from "react";
-import { ConnectionContext } from "../context/ConnectionContext";
+import { useState } from "react";
 import BuyForm from "./BuyForm";
 import SellForm from "./SellForm";
 
 const SwapMenu = () =>  {
-    const { connectedAccount, connectWallet } = useContext(ConnectionContext);
     const [isBuy, setIsBuy] = useState(true);
-
-    const handleSwap = () => {
-        if (isBuy) {
-            buyTokens()
-        } else {
-            console.log("Sell");
-        }
-    }
 
     return (
         <div className="flex flex-col items-center">
