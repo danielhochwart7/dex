@@ -9,9 +9,14 @@ const { ethereum } = window;
 
 const web3 = new Web3(ethereum);
 
-const getTokenContract = async () => {
+const getTokenAddress = async () => {
     const networkId = await web3.eth.net.getId();
-    const tokenAddress = Dho.networks[networkId].address;
+    const addr = Dho.networks[networkId].address;
+    return addr;
+}
+
+const getTokenContract = async () => {
+    const tokenAddress = await getTokenAddress();
     return new web3.eth.Contract(Dho.abi, tokenAddress);
 }
 
@@ -100,22 +105,42 @@ export const ConnectionProvider = ({ children }) => {
                     .send({ from: connectedAccount })
                     .on("transactionHash", (hash) => {
                         console.log(`TxHash approved: ${hash}`)
-                        getDexContract()
-                            .then(contract => {
-                                contract.methods.sellTokens(amount)
-                                    .send({ from: connectedAccount })
-                                    .on("transactionHash", (hash) => {
-                                        console.log(`TxHash tokens sold: ${hash}`)
-                                    }).then(res => {
-                                        checkAccountBalance(connectedAccount);
-                                    });
-                                })
-                            })
-                        });
+                    })
+                });
+
+            getDexContract()
+                .then(contract => {
+                    contract.methods.sellTokens(amount)
+                    .send({ from: connectedAccount })
+                    .on("transactionHash", (hash) => {
+                        console.log(`TxHash tokens sold: ${hash}`);
+                    });
+                });
+            checkAccountBalance(connectedAccount);
         } else {
             console.log("Amount must be greater than 0");
         }
-    } 
+    }
+
+    const importToken = async () => {
+        const tokenAddress = await getTokenAddress();
+        const tokenContract = await getTokenContract();
+        const tokenSymbol = await tokenContract.methods.symbol().call();
+        const tokenDecimals = await tokenContract.methods.decimals().call();;
+
+        ethereum.request({
+            method: 'wallet_watchAsset',
+            params: {
+                type: 'ERC20',
+                options: {
+                    address: tokenAddress,
+                    symbol: tokenSymbol,
+                    decimals: tokenDecimals,
+                },
+            },
+        }).then(() => console.log(`Adding token to wallet`))
+        .catch(error => console.log(`Error adding token to wallet: ${error}`));
+    }
 
     useEffect(() => {
         checkIfWalletIsConnected();
@@ -126,7 +151,7 @@ export const ConnectionProvider = ({ children }) => {
     }, []);
 
     return (
-        <ConnectionContext.Provider value={{ connectWallet, connectedAccount, accountEthBalance, accountDhoBalance, buyTokens, sellTokens }}>
+        <ConnectionContext.Provider value={{ connectWallet, connectedAccount, accountEthBalance, accountDhoBalance, buyTokens, sellTokens, importToken }}>
             {children}
         </ConnectionContext.Provider>
     )

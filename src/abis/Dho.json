@@ -8109,12 +8109,12 @@
         }
       },
       "links": {},
-      "address": "0xC4eD52143d8Bf0Fa8f231dA6503a66784535A4A5",
-      "transactionHash": "0x34da689c856a3ec9476bc3c838dfdba04bd317a5f5f81b0a6f3468d1d7b36df8"
+      "address": "0x70c6b2616E0cD1A30944F4E63Fb1633342Bff80c",
+      "transactionHash": "0x9e1e15548328b23073254413d360294b5ca0c980bc02357efdf2d5bcedf320f7"
     }
   },
   "schemaVersion": "3.4.4",
-  "updatedAt": "2022-01-23T23:45:31.832Z",
+  "updatedAt": "2022-01-24T14:30:26.866Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

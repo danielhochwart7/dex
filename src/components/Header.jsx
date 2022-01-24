@@ -4,7 +4,7 @@ import { ConnectionContext } from "../context/ConnectionContext";
 import { shortenAddress } from "../utils/shortenAddress";
 
 const Header = () =>  {
-    const { connectWallet, connectedAccount } = useContext(ConnectionContext);
+    const { connectedAccount } = useContext(ConnectionContext);
 
     return (
         <div className="w-full flex flex-row items-center py-5">

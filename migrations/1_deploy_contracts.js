@@ -9,5 +9,5 @@ module.exports = async function(deployer) {
     const dex = await Dex.deployed()
 
     //Transfer 1 million tokens from the deployer to the Dex
-    dho.transfer(dex.address, "1000000000000000000000000")
+    await dho.transfer(dex.address, "1000000000000000000000000")
 }

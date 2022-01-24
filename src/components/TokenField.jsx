@@ -1,6 +1,10 @@
+import { useContext } from "react";
+import { ConnectionContext } from "../context/ConnectionContext";
 import { SiEthereum } from "react-icons/si";
 import { MdOutlineGeneratingTokens } from "react-icons/md";
+
 const TokenField = ({tokenName, tokenBalance, value, props}) => {
+    const { importToken } = useContext(ConnectionContext);
     return (
         <div>
             <div className="flex justify-end text-xs">
@@ -29,6 +33,13 @@ const TokenField = ({tokenName, tokenBalance, value, props}) => {
                     </div>
                 </div>
             </div>
+                {tokenName == "DHO" && 
+                    <div className="flex flex-col items-end">
+                        <button type="button" onClick={importToken} className="text-xs cursor-pointer">
+                            Import token to wallet
+                        </button>
+                    </div>  
+                }
         </div>
     )
 }
