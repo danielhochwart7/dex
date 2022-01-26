@@ -34,7 +34,7 @@ const BuyForm = () => {
                 value={output}
                 props={outputProps}
             />
-            <SwapButton onClickEvent= {() => buyTokens(input)} />
+            <SwapButton onClickEvent={() => buyTokens(input)} />
         </div>
     );
 }
