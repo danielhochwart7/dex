@@ -1,9 +1,10 @@
 import { useContext, useState } from "react";
 import { ConnectionContext } from "../context/ConnectionContext";
 import TokenField from "./TokenField";
+import SwapButton from "./SwapButton";
 
 const SellForm = () => {
-    const { connectedAccount, accountEthBalance, accountDhoBalance, sellTokens, connectWallet } = useContext(ConnectionContext);
+    const { accountEthBalance, accountDhoBalance, sellTokens } = useContext(ConnectionContext);
     const [ input, setInput ] = useState(0);
     const [ output, setOutput ] = useState(0);
     const tokenRate = 100; 
@@ -33,17 +34,7 @@ const SellForm = () => {
                 value={output}
                 props={outputProps}
             />
-            <div className="flex flex-col items-center">
-                {connectedAccount ? (
-                    <button type="button" onClick={() => sellTokens(input)} className="flex rounded-full justify-center px-6 py-1 cursor-pointer bg-gradient-to-r from-purple-900 to-blue-500 shadow-sm">
-                        <p className="text-white text-base font-semibold">Swap</p>
-                    </button>
-                ) : (
-                    <button type="button" onClick={connectWallet} className="flex rounded-full justify-center px-6 py-1 cursor-pointer bg-gradient-to-r from-purple-900 to-blue-500 shadow-sm">
-                        <p className="text-white text-base font-semibold animate-pulse">Connect wallet first</p>
-                    </button>
-                )}
-            </div>
+            <SwapButton onClickEvent={() => sellTokens(input)} />
         </div>
     );
 }

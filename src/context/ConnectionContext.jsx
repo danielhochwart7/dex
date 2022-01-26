@@ -34,6 +34,7 @@ export const ConnectionProvider = ({ children }) => {
     const [connectedAccount, setConnectedAccount] = useState("");
     const [accountEthBalance, setAccountEthBalance] = useState(0);
     const [accountDhoBalance, setAccountDhoBalance] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
 
     const connectWallet = async () => {
         if(!ethereum) return alert("Please install metamask");
@@ -58,9 +59,7 @@ export const ConnectionProvider = ({ children }) => {
                 return accounts[0];
             }).then(account => {
                 checkAccountBalance(account);
-            }
-
-            ).catch(error => {
+            }).catch(error => {
                 console.log(error);
             });
     }
@@ -81,15 +80,17 @@ export const ConnectionProvider = ({ children }) => {
     const buyTokens = async (amount) => {
         if (amount > 0) {
             const tokenAmount = web3.utils.toWei(amount.toString(), "Ether");
-            getDexContract()
-                .then(contract => {
-                    contract.methods.buyTokens().send({ from: connectedAccount, value: tokenAmount })
-                        .on("transactionHash", (hash) => {
-                            console.log(`TxHash: ${hash}`)
-                        }).then(res => {
-                            checkAccountBalance(connectedAccount);
-                        });
+            const dexContract = await getDexContract();
+
+            setIsLoading(true);
+            await dexContract.methods.buyTokens()
+                .send({ from: connectedAccount, value: tokenAmount })
+                .on("transactionHash", (hash) => {
+                    console.log(`TxHash: ${hash}`)
                 })
+                .catch(error => console.log(error));
+            setIsLoading(false);
+            checkAccountBalance(connectedAccount);
         } else {
             console.log("Amount must be greater than 0");
         }
@@ -99,24 +100,28 @@ export const ConnectionProvider = ({ children }) => {
         if (tokenAmount > 0) {
             const amount = web3.utils.toWei(tokenAmount.toString(), "Ether");
             const dexAddress = await getDexAddress();
-            getTokenContract()
-                .then(contract => {
-                    contract.methods.approve(dexAddress, amount)
-                    .send({ from: connectedAccount })
-                    .on("transactionHash", (hash) => {
-                        console.log(`TxHash approved: ${hash}`)
-                    })
-                });
+            const tokenContract = await getTokenContract();
+            const dexContract = await getDexContract();
+            let approved = false;
 
-            getDexContract()
-                .then(contract => {
-                    contract.methods.sellTokens(amount)
-                    .send({ from: connectedAccount })
-                    .on("transactionHash", (hash) => {
-                        console.log(`TxHash tokens sold: ${hash}`);
-                    });
-                });
+            setIsLoading(true);
+            await tokenContract.methods.approve(dexAddress, amount)
+                .send({ from: connectedAccount })
+                .on("transactionHash", (hash) => {
+                    console.log(`TxHash approved: ${hash}`)
+                    approved = true;
+                })
+                .catch(error => console.log(error));
+
+            if (approved) {
+                await dexContract.methods.sellTokens(amount)
+                .send({ from: connectedAccount })
+                .on("transactionHash", (hash) => {
+                    console.log(`TxHash tokens sold: ${hash}`);
+                }).catch(error => console.log(error));
+            }
             checkAccountBalance(connectedAccount);
+            setIsLoading(false);
         } else {
             console.log("Amount must be greater than 0");
         }
@@ -151,7 +156,7 @@ export const ConnectionProvider = ({ children }) => {
     }, []);
 
     return (
-        <ConnectionContext.Provider value={{ connectWallet, connectedAccount, accountEthBalance, accountDhoBalance, buyTokens, sellTokens, importToken }}>
+        <ConnectionContext.Provider value={{ connectWallet, connectedAccount, accountEthBalance, accountDhoBalance, buyTokens, sellTokens, importToken, isLoading }}>
             {children}
         </ConnectionContext.Provider>
     )
