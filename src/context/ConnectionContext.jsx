@@ -7,7 +7,7 @@ export const ConnectionContext = React.createContext();
 
 const { ethereum } = window;
 
-const web3 = new Web3(ethereum);
+const web3 = new Web3(Web3.givenProvider);
 
 const getTokenAddress = async () => {
     const networkId = await web3.eth.net.getId();
